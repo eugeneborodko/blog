@@ -3,6 +3,7 @@ const express = require('express')
 const cookieParser = require('cookie-parser')
 const cors = require('cors')
 const db = require('./db')
+const models = require('./models/index')
 
 const PORT = process.env.PORT || 8080
 
