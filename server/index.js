@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser')
 const cors = require('cors')
 const db = require('./db')
 const models = require('./models/index')
+const router = require('./routes/index')
 
 const PORT = process.env.PORT || 8080
 
@@ -12,6 +13,7 @@ const app = express()
 app.use(express.json())
 app.use(cookieParser())
 app.use(cors())
+app.use('/api', router)
 
 const start = async () => {
   try {
