@@ -2,7 +2,6 @@ const bcrypt = require('bcrypt')
 const UserModel = require('../models/user-model')
 const UserRepository = require('../repositories/user-repository')
 const TokenService = require('./token-service')
-const UserDto = require('../dtos/user-dto')
 
 class UserService {
   async getAll() {
@@ -16,16 +15,22 @@ class UserService {
       return { message: `User ${email} already exists` }
     }
     const hashPassword = await bcrypt.hash(password, 3)
-    const user = await UserRepository.create(email, hashPassword)
-    const userDto = new UserDto(user)
-    const tokens = await TokenService.generateToken({ ...userDto })
+    const user = await UserRepository.registration(email, hashPassword)
+    const tokens = await TokenService.setToken(user)
+    return tokens
+  }
 
-    const refreshToken = TokenService.saveToken(tokens.refreshToken, userDto.id)
-
-    return {
-      ...tokens,
-      user: userDto,
+  async login(email, password) {
+    const user = await UserRepository.checkRegistration(email)
+    if (!user) {
+      return { message: `User with ${email} not found` }
     }
+    const isPasswordEqual = await bcrypt.compare(password, user.password)
+    if (!isPasswordEqual) {
+      return { message: `Wrong password` }
+    }
+    const tokens = await TokenService.setToken(user)
+    return tokens
   }
 }
 

@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken')
 const TokenRepository = require('../repositories/token-repository')
+const UserDto = require('../dtos/user-dto')
 
 class TokenService {
   async generateToken(payload) {
@@ -19,6 +20,17 @@ class TokenService {
   async saveToken(refreshToken, id) {
     const token = await TokenRepository.saveToken(refreshToken, id)
     return token
+  }
+
+  async setToken(user) {
+    const userDto = new UserDto(user)
+    const tokens = await this.generateToken({ ...userDto })
+    await this.saveToken(tokens.refreshToken, userDto.id)
+
+    return {
+      ...tokens,
+      user: userDto,
+    }
   }
 }
 

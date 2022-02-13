@@ -11,9 +11,14 @@ class UserRepository {
     return candidate
   }
 
-  async create(email, password) {
+  async registration(email, password) {
     const user = await UserModel.create({ email, password })
     return user
+  }
+
+  async checkLogin(email) {
+    const candidate = await UserModel.findOne({ where: { email } })
+    return candidate
   }
 }
 
