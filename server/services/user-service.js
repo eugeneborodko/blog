@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt')
 const UserModel = require('../models/user-model')
+const TokenRepository = require('../repositories/token-repository')
 const UserRepository = require('../repositories/user-repository')
 const TokenService = require('./token-service')
 
@@ -31,6 +32,11 @@ class UserService {
     }
     const tokens = await TokenService.setToken(user)
     return tokens
+  }
+
+  async logout(refreshToken) {
+    const token = await TokenRepository.removeToken(refreshToken)
+    return token
   }
 }
 
