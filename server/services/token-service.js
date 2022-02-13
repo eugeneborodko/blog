@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken')
+const TokenRepository = require('../repositories/token-repository')
 
 class TokenService {
   async generateToken(payload) {
@@ -13,6 +14,11 @@ class TokenService {
       accessToken,
       refreshToken,
     }
+  }
+
+  async saveToken(refreshToken, id) {
+    const token = await TokenRepository.saveToken(refreshToken, id)
+    return token
   }
 }
 

@@ -19,6 +19,9 @@ class UserService {
     const user = await UserRepository.create(email, hashPassword)
     const userDto = new UserDto(user)
     const tokens = await TokenService.generateToken({ ...userDto })
+
+    const refreshToken = TokenService.saveToken(tokens.refreshToken, userDto.id)
+
     return {
       ...tokens,
       user: userDto,
