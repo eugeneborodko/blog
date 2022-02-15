@@ -1,4 +1,5 @@
 const UserModel = require('../models/user-model')
+const TokenModel = require('../models/token-model')
 
 class UserRepository {
   async getAll() {
@@ -19,6 +20,11 @@ class UserRepository {
   async checkLogin(email) {
     const candidate = await UserModel.findOne({ where: { email } })
     return candidate
+  }
+
+  async findUser(id) {
+    const user = await UserModel.findOne({ where: id })
+    return user
   }
 }
 

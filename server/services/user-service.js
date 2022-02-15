@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt')
+const ApiError = require('../exceptions/api-error')
 const UserModel = require('../models/user-model')
 const TokenRepository = require('../repositories/token-repository')
 const UserRepository = require('../repositories/user-repository')
@@ -13,7 +14,7 @@ class UserService {
   async registration(email, password) {
     const candidate = await UserRepository.checkRegistration(email)
     if (candidate) {
-      return { message: `User ${email} already exists` }
+      throw ApiError.badRequest(`User ${email} already exists`)
     }
     const hashPassword = await bcrypt.hash(password, 3)
     const user = await UserRepository.registration(email, hashPassword)
@@ -24,11 +25,11 @@ class UserService {
   async login(email, password) {
     const user = await UserRepository.checkRegistration(email)
     if (!user) {
-      return { message: `User with ${email} not found` }
+      throw ApiError.badRequest(`User with ${email} not found`)
     }
     const isPasswordEqual = await bcrypt.compare(password, user.password)
     if (!isPasswordEqual) {
-      return { message: `Wrong password` }
+      throw ApiError.badRequest('Wrong password')
     }
     const tokens = await TokenService.setToken(user)
     return tokens
@@ -37,6 +38,20 @@ class UserService {
   async logout(refreshToken) {
     const token = await TokenRepository.removeToken(refreshToken)
     return token
+  }
+
+  async refresh(refreshToken) {
+    if (!refreshToken) {
+      throw ApiError.unauthorized()
+    }
+    // const userData = TokenService.validateRefreshToken(refreshToken)
+    const tokenFromDatabase = await TokenRepository.findToken(refreshToken)
+    if (!tokenFromDatabase) {
+      throw ApiError.unauthorized()
+    }
+    const user = await UserRepository.findUser(userData.id)
+    const tokens = await TokenService.setToken(user)
+    return tokens
   }
 }
 

@@ -8,7 +8,12 @@ class TokenRepository {
 
   async removeToken(refreshToken) {
     const token = await TokenModel.destroy({ where: { refreshToken } })
-    return {message: 'Token was removed from the database'}
+   return token
+  }
+
+  async findToken(refreshToken) {
+    const token = await TokenModel.findOne({ where: { refreshToken } })
+    return token
   }
 }
 

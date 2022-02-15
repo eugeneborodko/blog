@@ -32,6 +32,15 @@ class TokenService {
       user: userDto,
     }
   }
+
+  validateRefreshToken(refreshToken) {
+    try {
+      const user = jwt.verify(refreshToken, process.env.JWT_REFRESH_TOKEN_KEY)
+      return user
+    } catch (err) {
+      return null
+    }
+  }
 }
 
 module.exports = new TokenService()

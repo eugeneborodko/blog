@@ -18,5 +18,9 @@ router.post(
   '/logout',
   userController.logout
 )
+router.get(
+  '/refresh',
+  userController.refresh
+)
 
 module.exports = router

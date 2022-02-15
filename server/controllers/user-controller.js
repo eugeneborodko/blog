@@ -49,6 +49,16 @@ class UserController {
       console.log(err)
     }
   }
+
+  async refresh(req, res) {
+    try {
+      const { refreshToken } = req.cookies
+      const tokens = await userService.refresh(refreshToken)
+      return res.json(tokens)
+    } catch (err) {
+      console.log(err)
+    }
+  }
 }
 
 module.exports = new UserController()
