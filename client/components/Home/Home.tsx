@@ -1,19 +1,46 @@
 import { useRouter } from 'next/router'
-import { FC, useContext } from 'react'
+import { authHost, host } from '../../http'
+import { AuthResponse } from '../../models/response/AuthResponse'
+import { FC, useContext, useEffect } from 'react'
 import { AppContext, ContextProps } from '../../context'
 import { Button } from '../UI'
 
 const Home: FC = () => {
-  const { isAuth } = useContext(AppContext) as ContextProps
+  const { isAuth, setIsAuth, setUser } = useContext(AppContext) as ContextProps
+
   const router = useRouter()
 
-  const handleLogIn = () => {
+  const onLogIn = () => {
     router.push('/login')
   }
 
-  const handleLogOut = () => {
+  const onLogOut = () => {
     console.log('logout')
   }
+
+  const checkAuth = async () => {
+    try {
+      const response = await host.get<AuthResponse>(
+        `${process.env.NEXT_PUBLIC_API_URL}/refresh`,
+        {
+          withCredentials: true,
+        }
+      )
+      localStorage.setItem('token', response.data.accessToken)
+      setIsAuth(true)
+      setUser(response.data.user)
+    } catch (err) {
+      console.log(err.response?.data?.message)
+    }
+  }
+
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      checkAuth()
+    }
+  }, [])
+
+  console.log('isAuth: ', isAuth)
 
   return (
     <>
@@ -21,12 +48,12 @@ const Home: FC = () => {
       {isAuth ? (
         <>
           <div>You logged in</div>
-          <Button onClick={handleLogOut}>Log out</Button>
+          <Button onClick={onLogOut}>Log out</Button>
         </>
       ) : (
         <>
           <div>Please, log in</div>
-          <Button onClick={handleLogIn}>Log in</Button>
+          <Button onClick={onLogIn}>Log in</Button>
         </>
       )}
     </>
