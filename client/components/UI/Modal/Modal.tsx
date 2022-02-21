@@ -5,9 +5,10 @@ interface ModalProps {
   title: string
   buttonContent: string
   children?: ReactNode
+  onSubmit: () => void
 }
 
-const Modal: FC<ModalProps> = ({ title, buttonContent, children }) => {
+const Modal: FC<ModalProps> = ({ title, buttonContent, children, onSubmit }) => {
   const handleSubmit = (event: MouseEvent<HTMLFormElement>) => {
     event.preventDefault()
   }
@@ -16,7 +17,7 @@ const Modal: FC<ModalProps> = ({ title, buttonContent, children }) => {
     <form onSubmit={handleSubmit}>
       <h2>{title}</h2>
       {children}
-      <Button>{buttonContent}</Button>
+      <Button onClick={onSubmit}>{buttonContent}</Button>
     </form>
   )
 }

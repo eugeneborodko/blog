@@ -1,6 +1,8 @@
-import { FC } from 'react'
+import { FC, ComponentPropsWithoutRef } from 'react'
 
-const Input: FC = ({ ...props }) => {
+interface InputProps extends ComponentPropsWithoutRef<'input'> {}
+
+const Input: FC<InputProps> = ({ ...props }) => {
   return <input {...props} />
 }
 
