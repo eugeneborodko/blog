@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import AuthService from '../../services/AuthService'
-import { host } from '../../http'
+import { authHost, host } from '../../http'
 import { AuthResponse } from '../../models/response/AuthResponse'
 import { FC, useContext, useEffect } from 'react'
 import { AppContext, ContextProps } from '../../context'
@@ -13,6 +13,7 @@ const Home: FC = () => {
     AppContext
   ) as ContextProps
 
+  const [users, setUsers] = useState<IUser[]>([])
   const [error, setError] = useState<string>('')
 
   const router = useRouter()
@@ -37,6 +38,11 @@ const Home: FC = () => {
 
   const onSignUp = () => {
     router.push('/registration')
+  }
+
+  const getUsers = async () => {
+    const response = await authHost.get<IUser[]>('/users')
+    setUsers(response.data)
   }
 
   const checkAuth = async () => {
@@ -73,7 +79,17 @@ const Home: FC = () => {
       {isAuth && (
         <>
           <div>You logged in</div>
+          <Button onClick={getUsers}>Get users list</Button>
           <Button onClick={onLogOut}>Log out</Button>
+          {!!users.length && (
+            <div>
+              {users.map(({ id, email }: IUser) => (
+                <div key={id}>
+                  {id}: {email}
+                </div>
+              ))}
+            </div>
+          )}
         </>
       )}
       {!isReg && !isAuth && (
