@@ -5,6 +5,7 @@ const cors = require('cors')
 const db = require('./db')
 const models = require('./models/index')
 const router = require('./routes/index')
+const errorMiddleware = require('./middlewares/error-middleware')
 
 const PORT = process.env.PORT || 8080
 
@@ -17,6 +18,7 @@ app.use(cors({
   origin: process.env.CLIENT_URL
 }))
 app.use('/api', router)
+app.use(errorMiddleware)
 
 const start = async () => {
   try {

@@ -9,7 +9,9 @@ import { Button } from '../UI'
 import { IUser } from '../../models/IUser'
 
 const Home: FC = () => {
-  const { isAuth, setIsAuth, setUser } = useContext(AppContext) as ContextProps
+  const { isAuth, setIsAuth, isReg, setUser } = useContext(
+    AppContext
+  ) as ContextProps
 
   const [error, setError] = useState<string>('')
 
@@ -63,12 +65,18 @@ const Home: FC = () => {
     <>
       <h1>Home page</h1>
       {error && <h1>{error}</h1>}
-      {isAuth ? (
+      {isReg && !isAuth && (
+        <>
+          <Button onClick={onLogIn}>Log in</Button>
+        </>
+      )}
+      {isAuth && (
         <>
           <div>You logged in</div>
           <Button onClick={onLogOut}>Log out</Button>
         </>
-      ) : (
+      )}
+      {!isReg && !isAuth && (
         <>
           <div>Please, log in or sign up</div>
           <Button onClick={onLogIn}>Log in</Button>

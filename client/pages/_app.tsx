@@ -5,11 +5,14 @@ import { IUser } from '../models/IUser'
 import '../styles/globals.css'
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
+  const [isReg, setIsReg] = useState<boolean>(false)
   const [isAuth, setIsAuth] = useState<boolean>(false)
   const [user, setUser] = useState<IUser>({} as IUser)
 
   return (
-    <AppContext.Provider value={{ isAuth, setIsAuth, user, setUser }}>
+    <AppContext.Provider
+      value={{ isReg, setIsReg, isAuth, setIsAuth, user, setUser }}
+    >
       <Component {...pageProps} />
     </AppContext.Provider>
   )

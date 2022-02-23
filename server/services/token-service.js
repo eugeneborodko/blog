@@ -3,11 +3,11 @@ const TokenRepository = require('../repositories/token-repository')
 const UserDto = require('../dtos/user-dto')
 
 class TokenService {
-  async generateToken(payload) {
-    const accessToken = jwt.sign(payload, process.env.JWT_REFRESH_TOKEN_KEY, {
+  generateToken(payload) {
+    const accessToken = jwt.sign(payload, process.env.JWT_ACCESS_SECRET, {
       expiresIn: '30m',
     })
-    const refreshToken = jwt.sign(payload, process.env.JWT_ACCESS_TOKEN_KEY, {
+    const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, {
       expiresIn: '30d',
     })
 
@@ -17,14 +17,19 @@ class TokenService {
     }
   }
 
-  async saveToken(refreshToken, id) {
-    const token = await TokenRepository.saveToken(refreshToken, id)
+  async saveToken(refreshToken, userId) {
+    const tokenData = await TokenRepository.findTokenByUserId(userId)
+    if (tokenData) {
+      tokenData.refreshToken = refreshToken
+      return tokenData.save()
+    }
+    const token = await TokenRepository.saveToken(refreshToken, userId)
     return token
   }
 
   async setToken(user) {
     const userDto = new UserDto(user)
-    const tokens = await this.generateToken({ ...userDto })
+    const tokens = this.generateToken({ ...userDto })
     await this.saveToken(tokens.refreshToken, userDto.id)
 
     return {
@@ -33,9 +38,18 @@ class TokenService {
     }
   }
 
-  validateRefreshToken(refreshToken) {
+  validateAccessToken(token) {
     try {
-      const user = jwt.verify(refreshToken, process.env.JWT_REFRESH_TOKEN_KEY)
+      const user = jwt.verify(token, process.env.JWT_ACCESS_SECRET)
+      return user
+    } catch (err) {
+      return null
+    }
+  }
+
+  validateRefreshToken(token) {
+    try {
+      const user = jwt.verify(token, process.env.JWT_REFRESH_SECRET)
       return user
     } catch (err) {
       return null

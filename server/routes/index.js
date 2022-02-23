@@ -2,8 +2,9 @@ const Router = require('express')
 const router = new Router()
 const userController = require('../controllers/user-controller')
 const validateRegistration = require('../validators/registration')
+const authMiddleware = require('../middlewares/auth-middleware')
 
-router.get('/getAll', userController.getAll)
+router.get('/users', authMiddleware, userController.getAll)
 router.post(
   '/registration',
   validateRegistration(),

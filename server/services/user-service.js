@@ -18,8 +18,7 @@ class UserService {
     }
     const hashPassword = await bcrypt.hash(password, 3)
     const user = await UserRepository.registration(email, hashPassword)
-    const tokens = await TokenService.setToken(user)
-    return tokens
+    return user
   }
 
   async login(email, password) {
@@ -44,7 +43,7 @@ class UserService {
     if (!refreshToken) {
       throw ApiError.unauthorized()
     }
-    // const userData = TokenService.validateRefreshToken(refreshToken)
+    const userData = TokenService.validateRefreshToken(refreshToken)
     const tokenFromDatabase = await TokenRepository.findToken(refreshToken)
     if (!tokenFromDatabase) {
       throw ApiError.unauthorized()

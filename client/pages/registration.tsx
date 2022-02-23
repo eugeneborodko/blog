@@ -6,7 +6,7 @@ import AuthService from '../services/AuthService'
 import { AppContext, ContextProps } from '../context'
 
 const Login: NextPage = () => {
-  const { setIsAuth, setUser } = useContext(AppContext) as ContextProps
+  const {setIsReg } = useContext(AppContext) as ContextProps
 
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
@@ -24,10 +24,8 @@ const Login: NextPage = () => {
 
   const registration = async () => {
     try {
-      const response = await AuthService.registration(email, password)
-      localStorage.setItem('token', response.data.accessToken)
-      setIsAuth(true)
-      setUser(response.data.user)
+      await AuthService.registration(email, password)
+      setIsReg(true)
       router.push('/')
     } catch (err) {
       if (err instanceof Error) {
