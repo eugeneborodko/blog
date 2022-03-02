@@ -1,12 +1,11 @@
-import { FC, ReactNode } from 'react'
+import { FC, ReactNode, ComponentPropsWithoutRef } from 'react'
 
-interface ButtonProps {
-  onClick: () => void
+interface ButtonProps extends ComponentPropsWithoutRef<'button'> {
   children: ReactNode
 }
 
-const Button: FC<ButtonProps> = ({ onClick, children }) => {
-  return <button onClick={onClick}>{children}</button>
+const Button: FC<ButtonProps> = ({ children, ...props }) => {
+  return <button {...props}>{children}</button>
 }
 
 export default Button

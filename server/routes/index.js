@@ -23,5 +23,6 @@ router.get(
   '/refresh',
   userController.refresh
 )
+router.delete('/delete/:id', userController.delete)
 
 module.exports = router

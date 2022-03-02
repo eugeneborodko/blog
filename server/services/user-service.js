@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt')
 const ApiError = require('../exceptions/api-error')
 const UserModel = require('../models/user-model')
 const TokenRepository = require('../repositories/token-repository')
+const userRepository = require('../repositories/user-repository')
 const UserRepository = require('../repositories/user-repository')
 const TokenService = require('./token-service')
 
@@ -51,6 +52,16 @@ class UserService {
     const user = await UserRepository.findUser(userData.id)
     const tokens = await TokenService.setToken(user)
     return tokens
+  }
+
+  async deleteUser(id) {
+    const userData = await userRepository.findUser(id)
+    if (!id || !userData) {
+      throw ApiError.badRequest('You did not provide an id or user not found')
+    }
+
+    const user = await UserRepository.deleteUser(id)
+    return user
   }
 }
 
