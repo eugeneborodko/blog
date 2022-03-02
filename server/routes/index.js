@@ -3,6 +3,7 @@ const router = new Router()
 const userController = require('../controllers/user-controller')
 const validateRegistration = require('../validators/registration')
 const authMiddleware = require('../middlewares/auth-middleware')
+const checkRoleMiddleware = require('../middlewares/check-role-middleware')
 
 router.get('/users', authMiddleware, userController.getAll)
 router.post(
@@ -23,6 +24,6 @@ router.get(
   '/refresh',
   userController.refresh
 )
-router.delete('/delete/:id', userController.delete)
+router.delete('/delete/:id', checkRoleMiddleware, userController.delete)
 
 module.exports = router

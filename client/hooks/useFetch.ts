@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { AxiosResponse } from 'axios'
 
 const useFetch = <T>(request: () => Promise<AxiosResponse<T>>) => {
-  const [data, setData] = useState<T[]>([])
+  const [data, setData] = useState<T | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string>('')
 
@@ -20,7 +20,7 @@ const useFetch = <T>(request: () => Promise<AxiosResponse<T>>) => {
     }
   }
 
-  return [data, loading, error, fetchData]
+  return [data, loading, error, fetchData, setData]
 }
 
 export default useFetch

@@ -1,10 +1,18 @@
 import { AxiosResponse } from 'axios'
-import { authHost } from '../http/index'
+import { authHost, host } from '../http/index'
 import { IUser } from '../models/IUser'
 
 class UserService {
   static async getAll(): Promise<AxiosResponse<IUser[]>> {
-    return  authHost.get<IUser[]>('/users')
+      return authHost.get<IUser[]>('/users')
+  }
+
+  static async removeById(id: number): Promise<AxiosResponse<IUser>> {
+    try {
+      return host.delete<IUser>(`/delete/${id}`)
+    } catch (err) {
+      throw(err)
+    }
   }
 }
 

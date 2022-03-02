@@ -5,6 +5,10 @@ class ApiError extends Error {
     this.errors = errors
   }
 
+  static forbidden() {
+    return new ApiError(403, 'no access')
+  }
+
   static unauthorized() {
     return new ApiError(401, 'user unauthorized')
   }

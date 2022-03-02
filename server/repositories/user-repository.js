@@ -27,7 +27,8 @@ class UserRepository {
   }
 
   async deleteUser(id) {
-    const user = await UserModel.destroy({ where: { id } })
+    const user = await UserModel.findOne({ where: { id } })
+    await UserModel.destroy({ where: { id } })
     return user
   }
 }
