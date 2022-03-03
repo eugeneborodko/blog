@@ -13,6 +13,11 @@ class UserService {
     return users
   }
 
+  async getOne(id) {
+    const user = await UserRepository.getOne(id)
+    return user
+  }
+
   async registration(email, password) {
     const candidate = await UserRepository.checkRegistration(email)
     if (candidate) {

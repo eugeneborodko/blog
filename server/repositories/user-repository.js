@@ -6,6 +6,11 @@ class UserRepository {
     return users
   }
 
+  async getOne(id) {
+    const user = await UserModel.findOne({ where: { id } })
+    return user
+  }
+
   async checkRegistration(email) {
     const user = await UserModel.findOne({ where: { email } })
     return user

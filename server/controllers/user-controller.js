@@ -15,6 +15,16 @@ class UserController {
     }
   }
 
+  async getOne(req, res, next) {
+    try {
+      const { id } = req.params
+      const user = await userService.getOne(id)
+      return res.json(user)
+    } catch (err) {
+      next(err)
+    }
+  }
+
   async registration(req, res, next) {
     try {
       const { email, password, role } = req.body
