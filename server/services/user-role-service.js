@@ -9,6 +9,11 @@ class UserRoleService {
     const role = await UserRoleRepository.create(userId, roleId)
     return role
   }
+
+  async findUserById(userId) {
+    const user = await UserRoleRepository.findUserById(userId)
+    return user
+  }
 }
 
 module.exports = new UserRoleService()

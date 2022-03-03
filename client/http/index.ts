@@ -31,7 +31,7 @@ authHost.interceptors.response.use(
     if (isRetry) {
       originalRequest._isRetry = true
       try {
-        const response = await host.get<AuthResponse>(
+        const response = await authHost.get<AuthResponse>(
           `${process.env.NEXT_PUBLIC_API_URL}/refresh`,
           {
             withCredentials: true,

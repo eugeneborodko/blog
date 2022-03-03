@@ -24,6 +24,6 @@ router.get(
   '/refresh',
   userController.refresh
 )
-router.delete('/delete/:id', checkRoleMiddleware, userController.delete)
+router.delete('/delete/:id', checkRoleMiddleware(2), userController.delete)
 
 module.exports = router

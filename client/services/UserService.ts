@@ -9,7 +9,7 @@ class UserService {
 
   static async removeById(id: number): Promise<AxiosResponse<IUser>> {
     try {
-      return host.delete<IUser>(`/delete/${id}`)
+      return authHost.delete<IUser>(`/delete/${id}`)
     } catch (err) {
       throw(err)
     }

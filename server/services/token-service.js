@@ -27,8 +27,8 @@ class TokenService {
     return token
   }
 
-  async setToken(user) {
-    const userDto = new UserDto(user)
+  async setToken(user, roleId) {
+    const userDto = new UserDto(user, roleId)
     const tokens = this.generateToken({ ...userDto })
     await this.saveToken(tokens.refreshToken, userDto.id)
 

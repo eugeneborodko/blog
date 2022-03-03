@@ -5,6 +5,7 @@ const TokenRepository = require('../repositories/token-repository')
 const userRepository = require('../repositories/user-repository')
 const UserRepository = require('../repositories/user-repository')
 const TokenService = require('./token-service')
+const userRoleService = require('./user-role-service')
 
 class UserService {
   async getAll() {
@@ -31,7 +32,8 @@ class UserService {
     if (!isPasswordEqual) {
       throw ApiError.badRequest('Wrong password')
     }
-    const tokens = await TokenService.setToken(user)
+    const userData = await userRoleService.findUserById(user.id)
+    const tokens = await TokenService.setToken(user, userData.roleId)
     return tokens
   }
 
@@ -50,7 +52,8 @@ class UserService {
       throw ApiError.unauthorized()
     }
     const user = await UserRepository.findUser(userData.id)
-    const tokens = await TokenService.setToken(user)
+    const userById = await userRoleService.findUserById(user.id)
+    const tokens = await TokenService.setToken(user, userById.roleId)
     return tokens
   }
 

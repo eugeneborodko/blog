@@ -1,7 +1,8 @@
 class UserDto {
-  constructor({ email, id }) {
+  constructor({ email, id }, roleId) {
     this.email = email
     this.id = id
+    this.roleId = roleId
   }
 }
 

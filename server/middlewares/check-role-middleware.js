@@ -1,7 +1,7 @@
 const ApiError = require('../exceptions/api-error')
 const jwt = require('jsonwebtoken')
 
-const checkRoleMiddleware = (req, res, next) => {
+const checkRoleMiddleware = (roleId) => (req, res, next) => {
   if (req.method === 'OPTIONS') {
     next()
   }
@@ -11,11 +11,10 @@ const checkRoleMiddleware = (req, res, next) => {
       throw ApiError.badRequest('Not authorized')
     }
     const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET)
-    console.log('!!!!!!!!!!!!!!!!!!!!!!: ', decoded)
-    // if (decoded.role !== role) {
-    //   return res.status(403).json({ message: 'Нет доступа' })
-    // }
-    // req.user = decoded
+    if (decoded.roleId !== roleId) {
+      throw ApiError.forbidden()
+    }
+    req.user = decoded
     next()
   } catch (e) {
     throw ApiError.badRequest('Not authorized')

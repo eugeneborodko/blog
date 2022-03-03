@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import AuthService from '../../services/AuthService'
-import { host } from '../../http'
+import { authHost } from '../../http'
 import { AuthResponse } from '../../models/response/AuthResponse'
 import { FC, useContext, useEffect } from 'react'
 import { AppContext, ContextProps } from '../../context'
@@ -11,14 +11,10 @@ import UserService from '../../services/UserService'
 import useFetch from '../../hooks/useFetch'
 
 const Home: FC = () => {
-  const [
-    users, 
-    usersLoading, 
-    usersError, 
-    fetchData, 
-    setUsers
-  ] = useFetch<IUser[]>(UserService.getAll)
-  const { isAuth, setIsAuth, isReg, setUser } = useContext(
+  const [users, usersLoading, usersError, fetchData, setUsers] = useFetch<
+    IUser[]
+  >(UserService.getAll)
+  const { isAuth, setIsAuth, isReg, user, setUser } = useContext(
     AppContext
   ) as ContextProps
 
@@ -50,7 +46,7 @@ const Home: FC = () => {
 
   const checkAuth = async () => {
     try {
-      const response = await host.get<AuthResponse>(
+      const response = await authHost.get<AuthResponse>(
         `${process.env.NEXT_PUBLIC_API_URL}/refresh`,
         {
           withCredentials: true,
@@ -102,7 +98,9 @@ const Home: FC = () => {
                   <div key={id}>
                     {id}: {email}
                   </div>
-                  <button onClick={handleRemove(id)}>Remove user {id}</button>
+                  {user.roleId === 2 && (
+                    <button onClick={handleRemove(id)}>Remove user {id}</button>
+                  )}
                 </>
               ))}
             </div>
