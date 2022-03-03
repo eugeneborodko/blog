@@ -23,17 +23,6 @@ class PostController {
     }
   }
 
-  // async getByUserId(req, res, next) {
-  //   try {
-  //     const { userId } = req.query
-  //     console.log('#########################: ', userId)
-  //     const posts = postService.getByUserId(userId)
-  //     return res.json(posts)
-  //   } catch (err) {
-  //     next(err)
-  //   }
-  // }
-
   async create(req, res, next) {
     try {
       const { title, text, userId } = req.body

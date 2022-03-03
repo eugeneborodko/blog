@@ -1,11 +1,12 @@
 const Router = require('express')
 const router = new Router()
 const validatePost = require('../validators/post')
+const authMiddleware = require('../middlewares/auth-middleware')
 const postController = require('../controllers/post-controller')
 
-router.get('/', postController.getAll)
-router.get('/:id', postController.getOne)
+router.get('/', authMiddleware, postController.getAll)
+router.get('/:id', authMiddleware, postController.getOne)
 
-router.post('/create', validatePost(), postController.create)
+router.post('/create', authMiddleware, validatePost(), postController.create)
 
 module.exports = router
