@@ -3,7 +3,12 @@ const uuid = require('uuid')
 const postRepository = require('../repositories/post-repository')
 
 class PostService {
-  async getAll() {
+  async getAll(userId) {
+    if (userId) {
+      const posts = postRepository.getByUserId(userId)
+      return posts
+    }
+
     const posts = await postRepository.getAll()
     return posts
   }

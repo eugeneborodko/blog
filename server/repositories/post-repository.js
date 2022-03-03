@@ -11,6 +11,11 @@ class PostRepository {
     return post
   }
 
+  async getByUserId(userId) {
+    const post = await postModel.findAll({ where: { userId } })
+    return post
+  }
+
   async create(postBody) {
     const { title, text, img, userId } = postBody
     const post = postModel.create({ title, text, img, userId })

@@ -5,7 +5,8 @@ const ApiError = require('../exceptions/api-error')
 class PostController {
   async getAll(req, res, next) {
     try {
-      const posts = await postService.getAll()
+      const { userId } = req.query
+      const posts = await postService.getAll(userId)
       return res.json(posts)
     } catch (err) {
       next(err)
@@ -21,6 +22,17 @@ class PostController {
       next(err)
     }
   }
+
+  // async getByUserId(req, res, next) {
+  //   try {
+  //     const { userId } = req.query
+  //     console.log('#########################: ', userId)
+  //     const posts = postService.getByUserId(userId)
+  //     return res.json(posts)
+  //   } catch (err) {
+  //     next(err)
+  //   }
+  // }
 
   async create(req, res, next) {
     try {
