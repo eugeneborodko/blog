@@ -3,6 +3,16 @@ const uuid = require('uuid')
 const postRepository = require('../repositories/post-repository')
 
 class PostService {
+  async getAll() {
+    const posts = await postRepository.getAll()
+    return posts
+  }
+
+  async getOne(id) {
+    const post = await postRepository.getOne(id)
+    return post
+  }
+
   async create(postBody) {
     const { img } = postBody
     let fileName = uuid.v4() + '.jpg'
