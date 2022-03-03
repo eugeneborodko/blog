@@ -4,7 +4,7 @@ const postRepository = require('../repositories/post-repository')
 
 class PostService {
   async create(postBody) {
-    const { title, text, img, userId } = postBody
+    const { img } = postBody
     let fileName = uuid.v4() + '.jpg'
     img.mv(path.resolve(__dirname, '..', 'static', fileName))
     const post = await postRepository.create({ ...postBody, img: fileName })
